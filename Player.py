@@ -27,13 +27,18 @@ class Player:
         pygame.draw.circle(screen, self.color, (self.x,self.y), self.radius)
     def UpdatePosition(self):
         self.vy += gravity
-        fart = math.sqrt(self.vx**2 + self.vy**2)
         self.y += self.vy 
         self.x += self.vx
     def Collision(self, O, closest_x, closest_y, x, y, distance):
         AB = (closest_x - x, closest_y - y)
         skalar = AY[0] * AB[0] + AY[1] * AB[1]
+        if self.vx < 0:
+            R_Vektor = (-1,0)
+        else:
+            R_Vektor = (1,0)
+        skalar2 = R_Vektor[0] * AB[0] + R_Vektor[1] * AB[1]
         angle = math.degrees(math.acos(skalar/distance))
+        angle2 = math.degrees(math.acos(skalar2/distance))
         if angle == 0:
             self.y = O.y - self.radius
             self.vy = self.vy * Bounce
@@ -45,13 +50,21 @@ class Player:
         if angle == 90:
             self.vx = self.vx * Bounce
         elif angle < 90 and angle != 0:
-            self.y = O.y - self.radius
-            self.vy = self.vy * Bounce
-            #self.vx = self.vx * Bounce
+            if angle2 > 90:
+                self.y = O.y - self.radius
+                self.vy = self.vy * Bounce
+            else:
+                self.y = O.y - self.radius
+                self.vy = self.vy * Bounce
+                self.vx = self.vx * Bounce
         elif angle > 90 and angle != 180:
-            self.y = O.y + O.height + self.radius
-            self.vy = self.vy * Bounce
-            self.vx = self.vx * Bounce
+            if angle2 > 90:
+                self.y = O.y + O.height + self.radius
+                self.vy = self.vy * Bounce
+            else:
+                self.y = O.y + O.height + self.radius
+                self.vy = self.vy * Bounce
+                self.vx = self.vx * Bounce
 
         if abs(self.vy) < 1:
             self.vy = 0
@@ -61,7 +74,6 @@ class Player:
     def Jump(self, vx, vy):
         self.vy += vy * JumpForce
         self.vx += vx * JumpForce
-        #print(self.vx, self.vy)
 
 class Object:
     def __init__(self,x,y,color, width, height):
@@ -121,11 +133,8 @@ while running:
             Status = HitBox(O, x, y)
             if Status:
                 break
-        #if (O.y <= (P1.y + P1.radius) and (P1.y + P1.radius - P1.vy) <= (O.y + O.height) or O.y <= (P1.y - P1.radius) and (P1.y - P1.radius + P1.vy) <= (O.y + O.height)) and ((O.x <= (P1.x - P1.radius) <= (O.x + O.width)) or (O.x <= (P1.x + P1.radius) <= (O.x + O.width))):
-           # P1.Collision(O)
     
     P1.DrawPlayer()
-    #print(P1.vx)
     pygame.display.flip()
     screen.fill("black")
     clock.tick(60) 
