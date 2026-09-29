@@ -1,5 +1,6 @@
 import pygame
 import random
+from Player import Object
 
 WIDTH = 400
 HEIGHT = 400
@@ -39,14 +40,14 @@ class Background:
 
 
 
-class Platform:
+class Platform(Object):
 
     def __init__(self, color):
         self.xStart = random.randint(1, 10)
         self.yStart = random.randint(1, 10)
         self.size = random.randint(1, 4)
         self.color = color
-        self.body = [(self.xStart + i, self.yStart) for i in range(self.size)]
+        self.height = [(self.xStart + i, self.yStart) for i in range(self.size)]
     
     
 

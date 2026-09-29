@@ -1,5 +1,8 @@
 import pygame
 import math
+import random
+
+
 pygame.init()
 screen = pygame.display.set_mode((400, 600))
 clock = pygame.time.Clock()
@@ -87,6 +90,21 @@ class Object:
     def Mouse(self, pos):
         self.x, self.y = pos
 
+
+
+class Platform(Object):
+
+    def __init__(self, color):
+        x = random.randint(0, 300)
+        y = random.randint(100, 500)
+        width = random.randint(40, 100)
+        color = color
+        height = 40
+        super().__init__(x, y, color, width, height)
+    
+    
+
+
 def HitBox(O, x, y):
     Status = False
     closest_x = max(O.x, min(x, O.x + O.width))
@@ -110,7 +128,12 @@ O1 = Object(150,400,(0,255,0),100,100)
 O2 = Object(0,580,(0,255,0),400,20)
 O3 = Object(0,530,(0,255,0),20,70)
 O4 = Object(380,530,(0,255,0),20,70)
-Objects = [O1,O2,O3,O4]
+pl1 = Platform("blue")
+pl2 = Platform("white")
+pl3 = Platform("gray")
+
+
+Objects = [O1,O2,O3,O4, pl1, pl2, pl3]
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
